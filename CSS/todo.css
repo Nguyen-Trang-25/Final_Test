@@ -7,6 +7,9 @@
 
 /*---header---*/
 
+body li{
+    list-style: none;
+}
 .container{
     padding: 0px 40px 0px 40px;
 }
@@ -149,7 +152,7 @@
     /* background-color: blue; */
 }
 
-#todo__list{
+.list{
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -160,7 +163,7 @@
     overflow-y: auto;
 
 }
-#todo__list::-webkit-scrollbar{
+.list::-webkit-scrollbar{
     width: 4px;
     /* background-color: #00A6DA; */
     position: absolute;
@@ -168,16 +171,16 @@
     
     
 }
-#todo__list::-webkit-scrollbar-track{
+.list::-webkit-scrollbar-track{
     /* background-color: #00A6DA; */
 }
-#todo__list::-webkit-scrollbar-thumb{
+.list::-webkit-scrollbar-thumb{
     height: 10px;
     background-color: #DBDBDB;
     border-radius: 5px;
 
 }
-#todo__list::-webkit-scrollbar-corner{
+.list::-webkit-scrollbar-corner{
 
 }
 .task{
@@ -195,7 +198,7 @@
     padding: 10px 15px 0px 15px;
     width: 100%;
 }
-.name__cate{
+#name__cate{
     font-family: Plus Jakarta Sans;
     font-size: 12px;
     font-weight: 700;
@@ -237,7 +240,7 @@
     text-align: left;
     color: #5A5C63;
 }
-.main__content{
+#main__content{
     margin-bottom: 15px;
 }
 .clock{
@@ -250,7 +253,10 @@
 }
 #box__input{
 }
-.input__bgr{
+.fa-xmark{
+    cursor: pointer;
+}
+.bgr{
     position: absolute;
     top: 0;
     width: 100dvw;
@@ -261,7 +267,7 @@
     z-index: 9;
 
 }
-.input__container{
+.box__container{
     position: absolute;
     top: 50%;
     left: 50%;
@@ -276,22 +282,42 @@
     padding: 0 20px 25px 20px;
     border-radius: 4px;
 }
-.input__container p{
+.box__container p{
     padding: 15px 0px;
     font-family: Plus Jakarta Sans;
     font-size: 20px;
     font-weight: 700;
     color: #5A5C63;
 }
-.input__container i{
+.box__container i{
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 14px;
     color: #5A5C63;
 }
-.input__content{
+.box__content{
     display: flex;
     flex-direction: column;
     row-gap: 10px;
+}
+.fa-regular{
+    cursor: pointer;
+}
+#catrgory,#title,#content,
+#repair__category,#repair__content,#repair__title{
+    /* border-radius: 2px; */
+}
+.status{
+    display: flex;
+    justify-content:space-evenly;
+    align-items: center;
+}
+.status div{
+    font-family: Plus Jakarta Sans;
+    display: flex;
+    column-gap: 5px;
+    align-items: center;
+    font-size: 14px;
+    line-height: 22.2px;
 }
