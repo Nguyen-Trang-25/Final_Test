@@ -3,16 +3,40 @@ var submit = document.getElementById('submit')
 var category = document.getElementById('category');
 var title = document.getElementById('title');
 var content = document.getElementById('content');
-var local_todo = JSON.parse(localStorage.getItem('todo_task'));
+let local_todo = JSON.parse(localStorage.getItem('todo_task'));
+let local_doing = JSON.parse(localStorage.getItem('doing_task'));
+let local_finished = JSON.parse(localStorage.getItem('finished_task'));
+let local_blocked = JSON.parse(localStorage.getItem('blocked_task'));
 
+let todo__list = document.getElementById('todo__list')
+let doing__list = document.getElementById('doing__list')
+let finished__list = document.getElementById('finished__list')
+let blocked__list = document.getElementById('blocked__list')
 
-// local_todo = JSON.parse(localStorage.getItem('todo_task'))
-for(let i=0;i<local_todo.length ;i++){      
-    printfAllTask(i)
-    document.getElementById('todo__number').innerHTML=local_todo.length
+if (local_todo===null){
+    local_todo=[];
     localStorage.setItem('todo_task',JSON.stringify(local_todo));
-}
+}else printfAllTask(todo__list,local_todo,'todo__number','todo_task')
+if (local_doing===null){
+    local_doing=[];
+    localStorage.setItem('doing_task',JSON.stringify(local_doing));
+}else printfAllTask(doing__list,local_doing,'doing__number','doing_task')
+if (local_finished===null){
+    local_finished=[];
+    localStorage.setItem('finished_task',JSON.stringify(local_finished));
+
+}else printfAllTask(finished__list,local_finished,'finished__number','finished_task')
+if (local_blocked===null){
+    local_blocked=[];
+    localStorage.setItem('blocked_task',JSON.stringify(local_blocked));
     
+}else printfAllTask(blocked__list,local_blocked,'blocked__number','blocked_task')
+
+
+console.log(local_todo.length)
+document.getElementById('todo__number').innerHTML=local_todo.length
+    
+
 
 document.getElementById('box__input').style.display = 'none';
 document.getElementById('input__close').addEventListener('click',function(){
@@ -26,11 +50,9 @@ document.getElementById('input__bgr').addEventListener('click',function(){
     resetBoderInput()
 })
 
-let todo__list = document.getElementById('todo__list')
-if (local_todo===null){
-    local_todo=[];
-}
-document.getElementById('todo__number').innerHTML=local_todo.length
+
+
+
 
 
 // Su kien tao task
@@ -75,14 +97,12 @@ function takeDate(){
     return new Date().toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric'
+        day: 'numeric'
     });
 }
 
 //Ham tao task moi
+var tagi
 function createNewTask() {
     var obj_todo={
         obj_cate: category.value,
@@ -113,16 +133,25 @@ function createNewTask() {
                                 <div class="now">
                                     <div class="clock">
                                         <i class="fa-regular fa-clock"></i>
-                                        <p id="hour"> 
-                                        ${takeDate()} 
-                                        </p>
+                                        <p id="hour"> ${takeDate()}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     `  
-    li.querySelector('#trash').addEventListener('click',deleteTask)
-    li.querySelector('#pen').addEventListener('click',repairTask)
+    li.querySelector('#trash').addEventListener('click',function(){
+            tagi = this
+            deleteTask(tagi,local_todo,'todo__number','todo_task')
+            localStorage.setItem('todo_task',JSON.stringify(local_todo))
+
+        })
+    li.querySelector('#pen').addEventListener('click',function(){
+        tagi = this
+        console.log(this)
+        repairTask()
+        localStorage.setItem('todo_task',JSON.stringify(local_todo))
+
+    })
     
 }
 
@@ -169,61 +198,78 @@ function resetBoderInput(){
 }
 
 //Function printf all task
-function printfAllTask(i){
-    var task = document.createElement('li'); //tao the task moi
-    task.setAttribute('class','task');
-    todo_task.appendChild(task)
-    task.innerHTML=`
-            <div class="task__container">
-                <div class="category">
-                    <div class="text">
-                        <u id="name__cate">${local_todo[i].obj_cate}</u>
-                        <h4 id="h4">${local_todo[i].obj_title}</h4>
-                    </div>
-                    <div class="icon">
-                        <i class="fa-regular fa-pen-to-square" id="pen"></i>
-                        <i class="fa-regular fa-trash-can " id="trash"></i>
-                    </div>
-                </div>
-                <div class="task__content">
-                    <p id="main__content">${local_todo[i].obj_content}</p>
-                    <div class="now">
-                        <div class="clock">
-                            <i class="fa-regular fa-clock"></i>
-                            <p id="hour"> 
-                            ${local_todo[i].obj_hour} 
-                            </p>
+function printfAllTask(nameTask,arrayTask,nameTaskNumber,nameLocal){
+    // arrayTask = JSON.parse(localStorage.getItem(nameLocal));
+    for(let i=0;i<arrayTask.length ;i++){      
+        var task = document.createElement('li'); //tao the task moi
+        task.setAttribute('class','task');
+        nameTask.appendChild(task)
+        task.innerHTML=`
+                <div class="task__container">
+                    <div class="category">
+                        <div class="text">
+                            <u id="name__cate">${arrayTask[i].obj_cate}</u>
+                            <h4 id="h4">${arrayTask[i].obj_title}</h4>
+                        </div>
+                        <div class="icon">
+                            <i class="fa-regular fa-pen-to-square" id="pen"></i>
+                            <i class="fa-regular fa-trash-can " id="trash"></i>
                         </div>
                     </div>
-                </div>
-            </div>`  
-    task.querySelector('.fa-trash-can').addEventListener('click',deleteTask)  
-    task.querySelector('#pen').addEventListener('click',repairTask)
+                    <div class="task__content">
+                        <p id="main__content">${arrayTask[i].obj_content}</p>
+                        <div class="now">
+                            <div class="clock">
+                                <i class="fa-regular fa-clock"></i>
+                                <p id="hour">${arrayTask[i].obj_hour}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>`  
+        document.getElementById(nameTaskNumber).innerHTML=arrayTask.length
+        task.querySelector('#trash').addEventListener('click',function(){
+            var tagi = this
+            deleteTask(tagi,arrayTask,nameTaskNumber,nameLocal)
+            localStorage.setItem(nameLocal,JSON.stringify(arrayTask))
+
+        })
+        task.querySelector('#pen').addEventListener('click',function(){
+            tagi = this
+            console.log(this)
+            repairTask()
+            localStorage.setItem(nameLocal,JSON.stringify(arrayTask))
+
+        })
+        localStorage.setItem(nameLocal,JSON.stringify(arrayTask))
+
+    }
 }
 
 
 //Ham xoa task
 
-function deleteTask(){
-    local_todo = JSON.parse(localStorage.getItem('todo_task'))
-    // console.log(this)
-    let deleting =this.closest('li')
+function deleteTask(tagi,arrayTask,nameTaskNumber,nameLocal){
+    console.log(tagi)
+    console.log(arrayTask)
+    // arrayTask = JSON.parse(localStorage.getItem(nameLocal));
+    let deleting =tagi.closest('li');
     console.log(deleting)
     var delete_cate = deleting.querySelector('#name__cate').textContent
     var delete_title = deleting.querySelector('#h4').textContent
     var delete_content = deleting.querySelector('#main__content').textContent
-    console.log(delete_cate,delete_title,delete_content)
     deleting.remove()   
-    for(let a=0;a<local_todo.length;a++){
-            if(local_todo[a].obj_cate == delete_cate && 
-                local_todo[a].obj_title == delete_title &&
-                local_todo[a].obj_content == delete_content){
-                        console.log(local_todo[a])
-                        local_todo.splice(a,1)  
+    for(let a=0;a<arrayTask.length;a++){
+            if(arrayTask[a].obj_cate == delete_cate && 
+                arrayTask[a].obj_title == delete_title &&
+                arrayTask[a].obj_content == delete_content){
+                        console.log(arrayTask[a])
+                        arrayTask.splice(a,1)  
+                        console.log(arrayTask)
+                        break;
                     }
                 }
-    document.getElementById('todo__number').innerHTML=local_todo.length
-    localStorage.setItem('todo_task',JSON.stringify(local_todo));
+    document.getElementById(nameTaskNumber).innerHTML=arrayTask.length
+    localStorage.setItem(nameLocal,JSON.stringify(arrayTask));
 }
             
             
@@ -237,72 +283,62 @@ var repair__content = document.getElementById('repair__content')
 //Ham repair task
 var repairing
 var id
+var whatTask
 function repairTask(){
-        document.getElementById('box__repair').style.display="unset"
-        repairing = this.closest('li')
-        console.log(repairing)
-        // var parent =
-        // if(repairing.parentElement.id=='todo__list') console.log('hehehe')
-        // switch(true){
-        //     case status__todo.checked:{
-        //         console.log('todo');
-        //         break;
-        //     }
-        //     case (status__doing.checked && (local_todo[id].status != 'doing')) :{
-        //         console.log('doing');
-        //         createNewTaskTest(doing__list,'obj_doing',local_doing,'hihi','hahah','111','doing')
-        //         break;
-        //     }
-        //     case status__finished.checked:{
-        //         console.log('finshed');
-        //         break;
-        //     }
-        //     case status__blocked.checked:{
-        //         console.log('blocked');
-        //         break;
-        //     }
-        // } 
-        id = getContentTask(arrayTask,repairing)
-    }
-
-document.addEventListener('DOMContentLoaded',function(){
-    document.getElementById('repair__submit').addEventListener('click',function(){
-        local_todo = JSON.parse(localStorage.getItem('todo_task'))
-        console.log("jiji")
-        if(document.getElementById('repair__category').value &&
-        document.getElementById('repair__title').value &&
-        document.getElementById('repair__content').value) 
-        {
-            local_todo[id].obj_cate= repairing.querySelector('#name__cate').textContent = document.getElementById('repair__category').value
-            local_todo[id].obj_title = repairing.querySelector('#h4').textContent = document.getElementById('repair__title').value
-            local_todo[id].obj_content = repairing.querySelector('#main__content').textContent = document.getElementById('repair__content').value
-            local_todo[id].obj_hour = repairing.querySelector('#hour').textContent=takeDate()
-            localStorage.setItem('todo_task',JSON.stringify(local_todo));
-            resetBoderRepair()
-            document.getElementById('box__repair').style.display='none'
+    // arrayTask = JSON.parse(localStorage.getItem(nameLocal));
+    document.getElementById('box__repair').style.display="unset"
+    repairing = tagi.closest('li')
+    console.log(repairing)
+    var parent = repairing.parentElement.id
+    switch(true){
+        case parent == 'todo__list'  :{
+            id = getContentTask(local_todo,repairing,'todo_task')
+            whatTask = local_todo   
+            console.log('todo');
+            break;
         }
-        else checkContent2()
-        setStatusTask()
-    })
-})
+        case parent == 'doing__list' :{
+            id = getContentTask(local_doing,repairing,'doing_task')
+            whatTask = local_doing
+            console.log('doing');
+            break;
+        }
+        case parent == 'finished__list':{
+            id = getContentTask(local_finished,repairing,'finished_task')
+            whatTask = local_finished
+            console.log('finished');
+            break;
+        }
+        case parent == 'blocked__list':{
+            id = getContentTask(local_blocked,repairing,'blocked_task')
+            whatTask = local_blocked
+            console.log('blocked');
+            break;
+        }
+    } 
+    console.log(whatTask)
+    console.log(id)
+}
+
+
 
 // Function get content task
-function getContentTask(arrayTask,repairing){
-    arrayTask = JSON.parse(localStorage.getItem('todo_task'))
+function getContentTask(arrayTask,repairing,nameLocal){
+    arrayTask = JSON.parse(localStorage.getItem(nameLocal))
     var repair_cate = repairing.querySelector('#name__cate').textContent
     var repair_title = repairing.querySelector('#h4').textContent
     var repair_content = repairing.querySelector('#main__content').textContent
     let i=0;
     for(i ;i<arrayTask.length;i++){
-            console.log('jijii')
-            if(arrayTask[i].obj_cate == repair_cate && 
+        console.log('jijii')
+        if(arrayTask[i].obj_cate == repair_cate && 
                 arrayTask[i].obj_title == repair_title &&
                 arrayTask[i].obj_content == repair_content)
             break       
-    }
-    document.getElementById('repair__category').value = local_todo[i].obj_cate
-    document.getElementById('repair__title').value = local_todo[i].obj_title
-    document.getElementById('repair__content').value = local_todo[i].obj_content
+        }
+    document.getElementById('repair__category').value = arrayTask[i].obj_cate
+    document.getElementById('repair__title').value = arrayTask[i].obj_title
+    document.getElementById('repair__content').value = arrayTask[i].obj_content
     return i;
 }
 
@@ -352,89 +388,106 @@ document.getElementById('repair__bgr').addEventListener('click',function(){
 
 // Function doi status task
 
+document.addEventListener('DOMContentLoaded',function(){
+    document.getElementById('repair__submit').addEventListener('click',function(){
+        if(document.getElementById('repair__category').value &&
+        document.getElementById('repair__title').value &&
+        document.getElementById('repair__content').value) 
+        {
+            whatTask[id].obj_cate= repairing.querySelector('#name__cate').textContent = document.getElementById('repair__category').value
+            whatTask[id].obj_title = repairing.querySelector('#h4').textContent = document.getElementById('repair__title').value
+            whatTask[id].obj_content = repairing.querySelector('#main__content').textContent = document.getElementById('repair__content').value
+            whatTask[id].obj_hour = repairing.querySelector('#hour').textContent=takeDate()
+            localStorage.setItem('todo_task',JSON.stringify(whatTask));
+            console.log(whatTask)
+            resetBoderRepair()
+            document.getElementById('box__repair').style.display='none'
+            setStatusTask(whatTask)
+            console.log(2)
 
-let doing__list = document.getElementById('doing__list')
-local_doing=JSON.parse(localStorage.getItem('doing_task'))
-if (local_doing===null){
-    local_doing=[];
-}
-document.getElementById('todo__number').innerHTML=local_todo.length
-// if(status__doing.checked && local_todo[id].status!='doing'){
-//     var obj_doing={
-//         obj_cate: local_todo[id].obj_cate,
-//         obj_title: local_todo[id].obj_title,
-//         obj_content: local_todo[id].obj_content,
-//         obj_hour: takeDate(),
-//         status: 'doing'
-//     }
-//     local_doing.push(obj_doing);
-//     console.log(local_doing)
-//     var li = document.createElement('li')
-//     li.setAttribute('class','task')
-//     document.getElementById('doing__list').appendChild(li)
-//     li.innerHTML = `    
-//                     <div class="task__container">
-//                             <div class="category">
-//                                 <div class="text">
-//                                     <u id="name__cate">${local_todo[id].obj_cate}</u>
-//                                     <h4 id="h4">${local_todo[id].obj_title}</h4>
-//                                 </div>
-//                                 <div class="icon">
-//                                     <i class="fa-regular fa-pen-to-square" id="pen"></i>
-//                                     <i class="fa-regular fa-trash-can " id="trash"></i>
-//                                 </div>
-//                             </div>
-//                             <div class="task__content">
-//                                 <p id="main__content">${local_todo[id]}</p>
-//                                 <div class="now">
-//                                     <div class="clock">
-//                                         <i class="fa-regular fa-clock"></i>
-//                                         <p id="hour"> 
-//                                         ${takeDate()} 
-//                                         </p>
-//                                     </div>
-//                                 </div>
-//                             </div>
-//                         </div>
-//                     `  
-//     document.getElementById('doing__number').innerHTML=local_doing.length
-//     li.querySelector('#trash').addEventListener('click',deleteTask)
-//     li.querySelector('#pen').addEventListener('click',repairTask)
-//     localStorage.setItem('doing_task',JSON.stringify(local_doing));
-//     // localStorage.setItem(JSON.stringify('local_doing'))
-//     // status__todo.onclick()
-// }
-
+        }
+        else checkContent2()
+        console.log(whatTask)
+    })
+})
 
 let status__todo = document.getElementById('status__todo')
 let status__doing = document.getElementById('status__doing')
 let status__finished = document.getElementById('status__finished')
 let status__blocked = document.getElementById('status__blocked')
 
-function setStatusTask(){
-    console.log(status__doing.checked && (local_todo[id].status != 'doing'))
+function setStatusTask(whatTask){
+    console.log(whatTask[id].obj_cate,whatTask[id].obj_title,whatTask[id].obj_content)
+    console.log(status__doing.checked && (whatTask[id].status != 'doing'))
     switch(true){
-        case status__todo.checked:{
+        case (status__todo.checked && (whatTask[id].status != 'todo')):{
             console.log('todo');
+            console.log(whatTask)
+            createNewTaskTest(todo__list,'todo_task','obj_todo',local_todo,whatTask[id].obj_cate,whatTask[id].obj_title,whatTask[id].obj_content,'todo','todo__number')
+            console.log(tagi,todo__list,local_todo)
+            chooseTaskDelete(whatTask)
             break;
         }
-        case (status__doing.checked && (local_todo[id].status != 'doing')) :{
+        case (status__doing.checked && (whatTask[id].status != 'doing')) :{
+            console.log(whatTask)
             console.log('doing');
-            createNewTaskTest(doing__list,'obj_doing',local_doing,'hihi','hahah','111','doing')
+            createNewTaskTest(doing__list,'doing_task','obj_doing',local_doing,whatTask[id].obj_cate,whatTask[id].obj_title,whatTask[id].obj_content,'doing','doing__number')   
+            chooseTaskDelete(whatTask)
+            localStorage.setItem('doing_task',JSON.stringify(local_doing));
+
             break;
         }
-        case status__finished.checked:{
-            console.log('finshed');
+        case (status__finished.checked && (whatTask[id].status != 'finished')):{
+            console.log('finished');
+            createNewTaskTest(finished__list,'finished_task','obj_finished',local_finished,whatTask[id].obj_cate,whatTask[id].obj_title,whatTask[id].obj_content,'finished','finished__number')
+            chooseTaskDelete(whatTask)
+            localStorage.setItem('finished_task',JSON.stringify(local_finished));
+            
             break;
         }
-        case status__blocked.checked:{
+        case (status__blocked.checked && (whatTask[id].status != 'blocked')):{
             console.log('blocked');
+            createNewTaskTest(blocked__list,'blocked_task','obj_blocked',local_blocked,whatTask[id].obj_cate,whatTask[id].obj_title,whatTask[id].obj_content,'blocked','blocked__number')
+            chooseTaskDelete(whatTask)
+            localStorage.setItem('blocked_task',JSON.stringify(local_blocked));
+
             break;
         }
     } 
 }
 
- function createNewTaskTest(nameTask,objectTask,arrayTask,categoryValue,titleValue,contentValue,statusNow) {
+//Function get task is deleted
+function chooseTaskDelete(whatTask){
+    console.log(whatTask[id].status)
+    switch (whatTask[id].status){
+        case 'todo':{
+            console.log('uauauauau')
+            deleteTask(tagi,whatTask,'todo__number','todo_task')
+            break
+        }
+        case 'doing':{
+            deleteTask(tagi,whatTask,'doing__number','doing_task')
+            break
+        }
+        case 'finished':{
+            deleteTask(tagi,whatTask,'finished__number','finished_task')
+            break
+        }
+        case 'blocked':{
+            deleteTask(tagi,whatTask,'blocked__number','blocked_task')
+            break
+        }
+    }
+}
+
+
+
+// Function create a new task when repair status's task
+
+function createNewTaskTest(nameTask,nameLocal,objectTask,arrayTask,categoryValue,titleValue,contentValue,statusNow,nameTaskNumber) {
+    // arrayTask = JSON.parse(localStorage.getItem(nameLocal))
+    console.log(arrayTask)
+    console.log('1')
     var objectTask={
         obj_cate: categoryValue,
         obj_title: titleValue,
@@ -442,6 +495,7 @@ function setStatusTask(){
         obj_hour: takeDate(),
         status: statusNow
     }
+    console.log(objectTask)
     arrayTask.push(objectTask);
     console.log(arrayTask)
     var li = document.createElement('li')
@@ -451,8 +505,8 @@ function setStatusTask(){
                     <div class="task__container">
                             <div class="category">
                                 <div class="text">
-                                    <u id="name__cate">${categoryValue}</u>
-                                    <h4 id="h4">${titleValue}</h4>
+                                    <u id="name__cate">${objectTask.obj_cate}</u>
+                                    <h4 id="h4">${objectTask.obj_title}</h4>
                                 </div>
                                 <div class="icon">
                                     <i class="fa-regular fa-pen-to-square" id="pen"></i>
@@ -460,19 +514,33 @@ function setStatusTask(){
                                 </div>
                             </div>
                             <div class="task__content">
-                                <p id="main__content">${contentValue}</p>
+                                <p id="main__content">${objectTask.obj_content}</p>
                                 <div class="now">
                                     <div class="clock">
                                         <i class="fa-regular fa-clock"></i>
-                                        <p id="hour"> 
-                                        ${takeDate()} 
-                                        </p>
+                                        <p id="hour">${takeDate()}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     `  
-    li.querySelector('#trash').addEventListener('click',deleteTask)
-    li.querySelector('#pen').addEventListener('click',repairTask)
-    
+    li.querySelector('#trash').addEventListener('click',function(){
+            var tagi = this
+            deleteTask(tagi,arrayTask,nameTaskNumber,nameLocal)
+            localStorage.setItem(nameLocal,JSON.stringify(arrayTask))
+
+        })
+    li.querySelector('#pen').addEventListener('click',function(){
+        tagi = this
+        console.log(this)
+        repairTask()
+        localStorage.setItem(nameLocal,JSON.stringify(arrayTask))
+
+    })
+    document.getElementById('todo__number').innerHTML=local_todo.length
+    document.getElementById('doing__number').innerHTML=local_doing.length
+    document.getElementById('finished__number').innerHTML=local_finished.length
+    document.getElementById('blocked__number').innerHTML=local_blocked.length
+    localStorage.setItem(nameLocal,JSON.stringify(arrayTask))
+    console.log('doi status')
 }
