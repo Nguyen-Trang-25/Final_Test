@@ -103,7 +103,9 @@ document.addEventListener("DOMContentLoaded", function () {
         resetInput('login__email','login__pass')
         document.querySelector('.regis__content').style.display = 'flex'
         document.querySelector('.login__content').style.display = 'none'
-    });
+        document.getElementById("register").style.borderBottom = '2px solid #11698E'
+        document.getElementById("login").style.borderBottom = 'none'
+    })
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -111,6 +113,8 @@ document.addEventListener("DOMContentLoaded", function () {
         resetInput('regis__email','login__email')
         document.querySelector('.regis__content').style.display = 'none'
         document.querySelector('.login__content').style.display = 'flex'
+        document.getElementById("login").style.borderBottom = '2px solid #11698E'
+        document.getElementById("register").style.borderBottom = 'none'
     });
 });
 

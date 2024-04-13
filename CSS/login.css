@@ -169,3 +169,6 @@ body{
 #button__login,#button__register{
     cursor: pointer;
 }
+#login{
+    border-bottom: 2px solid #11698E;
+}
