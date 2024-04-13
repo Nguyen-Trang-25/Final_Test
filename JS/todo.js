@@ -196,31 +196,21 @@ function clearInput(){
 
 // Hàm check content
 
-function checkContent(){
-    if(!category.value){
-        document.getElementById('category').style.border= '1px solid red' 
-        document.getElementById('category').style.borderRadius= '3px' 
+function checkField(inputElement) {
+    if ((!inputElement.value || (/^\s*$/.test(inputElement.value)))) {
+        inputElement.style.border = '1px solid red';
+    } else {
+        inputElement.style.border = '1px solid green';
     }
-    else{
-        document.getElementById('category').style.border= '1px solid green' 
-        document.getElementById('category').style.borderRadius= '3px' 
-    }
-    if(!content.value){
-        document.getElementById('content').style.border= '1px solid red' 
-        document.getElementById('content').style.borderRadius= '3px' 
-    }else{
-        document.getElementById('content').style.border= '1px solid green' 
-        document.getElementById('content').style.borderRadius= '3px' 
-    }
-    if(!title.value){
-        document.getElementById('title').style.border= '1px solid red' 
-        document.getElementById('title').style.borderRadius= '3px' 
-    }
-    else{
-        document.getElementById('title').style.border= '1px solid green' 
-        document.getElementById('title').style.borderRadius= '3px' 
-    }
+    inputElement.style.borderRadius = '3px';
 }
+
+function checkContent() {
+    checkField(category);
+    checkField(content);
+    checkField(title);
+}
+
 
 //Ham reset boder input
 function resetBoderInput(){
