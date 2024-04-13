@@ -8,21 +8,23 @@ body{
     height: 100%;
 }
 .all{
+    overflow: hidden;
     /* display: flex; */
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 100dvw;
+    height: 100dvh;
     font-family: Plus Jakarta Sans;
     /* background-color: #000000; */
 }
+
 .img__left{
     width: 100%;
-    height: 100%;
+    height: 90%;
     display: block;
     position: absolute;
-    /* top: 451px; */
-    bottom: -94px;
-    left: -88px;     
+    /* top: 0; */
+    bottom: -22dvh;
+    left: 0;     
     z-index: -2;
 }
 .img__left img{
@@ -31,28 +33,28 @@ body{
 }
 .img__right{
     width: 100%;
-    height: 100%;
+    height: 85%;
     position: absolute;
     top: 0;
-    right: -90%;
-    /* left: 80%; */
-    z-index: -2;
+    right: -74dvw;
+    z-index: -10;
 }
 .img__right img{
     height: 70%; 
 }
 .box{
-    position: relative;
+    position: absolute;
     box-shadow: 0px 1px 13px 0px #0000002E;
     width: 1024px;
     height: 700px;
-    margin: auto;
+    top: 50%;
+    left: 50%;
     align-items: center;
     justify-content: center;
     display: flex;
     /* padding: 0px 120px 0px 0px;  */
     /* gap: 120px; */
-    transform: translate(0,6%);
+    transform: translate(-50%,-50%);
     border-radius: 25px;
     /* flex: 1 1 auto; */
     background-color: #fff;
@@ -73,6 +75,10 @@ body{
 
 /*---Login---*/
 
+
+#login,#register{
+    cursor: pointer;
+}
 .box__user{
     width: 50%;
     display: flex;
@@ -104,7 +110,6 @@ body{
     gap: 4px;
     border-radius: 2px 0px 0px 0px;
     border: 1px solid #D9D9D9;
-    color: #D9D9D9;
 
 }
 .regis__content.user__content{
@@ -160,4 +165,7 @@ body{
     font-size: 14px;
     font-weight: 400;
     line-height: 22px;
+}
+#button__login,#button__register{
+    cursor: pointer;
 }
