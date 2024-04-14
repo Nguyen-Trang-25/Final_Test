@@ -26,10 +26,11 @@ function register() {
     if (isUsernameTaken(newUsername)) {
         alert("Email already exists! Try another.");
         return;
-    }
+    }``
 
-    if(!document.getElementById('regis__check').Checked){
+    if(!document.getElementById('regis__check').checked){
         alert("Accept all terms.");
+        return;
     }
 
     const user = {
@@ -38,6 +39,10 @@ function register() {
     }
     arrayUser.push(user)
     localStorage.setItem('userLocal', JSON.stringify(arrayUser))
+    document.querySelector('.regis__content').style.display = 'none'
+    document.querySelector('.login__content').style.display = 'flex'
+    document.getElementById("login").style.borderBottom = '2px solid #11698E'
+    document.getElementById("register").style.borderBottom = 'none'
 }
 
 function isUsernameTaken(username) {
@@ -131,25 +136,3 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("button__register").addEventListener("click", register);
 });
 
-function redirectToRegister() {
-
-    document.getElementById("open_login").style.display = 'none';
-    document.getElementById("open_register").style.display = 'flex';
-    document.getElementById("login_area").style.display = 'none';
-    document.getElementById("register_area").style.display = 'flex';
-
-    document.getElementById("register_style").style.borderBottom = '2px solid #11698E'
-    document.getElementById("login_style").style.borderBottom = 'none'
-}
-
-function redirectToLogin() {
-
-    document.getElementById("open_login").style.display = 'flex';
-    document.getElementById("open_register").style.display = 'none';
-    document.getElementById("login_area").style.display = 'flex';
-    document.getElementById("register_area").style.display = 'none';
-
-    document.getElementById("register_style").style.borderBottom = 'none'
-    document.getElementById("login_style").style.borderBottom = '2px solid #11698E'
-
-}
